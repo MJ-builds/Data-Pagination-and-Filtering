@@ -1,2 +1,2 @@
 # data-pagination-and-filtering
- Techdegree project 2
+ My second Techdegree project.
