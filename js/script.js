@@ -5,22 +5,21 @@ FSJS Project 2 - Data Pagination and Filtering
 
 document.addEventListener('DOMContentLoaded', () => {
 
+let itemsPerPage = 9; //Global scope
 
-/*Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
+//This function will create and insert/append the elements needed to display a "page" of nine students
 function showPage (list,page) {
 
    // create two variables which will represent the index for the first and last student on the page
-   let itemsPerPage = 9;
    let startIndex = ((page * itemsPerPage) - itemsPerPage);
    let endIndex = ((page * itemsPerPage) -1);
 
-  // select the element with a class of `student-list` and assign it to a variable
-  let studentList = document.querySelector('.student-list');
+   // select the element with a class of `student-list` and assign it to a variable
+   let studentList = document.querySelector('.student-list');
 
   // set the innerHTML property of the variable you just created to an empty string
       studentList.innerHTML = '';
+      let student ='';
 
   // loop over the length of the `list` parameter
   for (let i = 0; i < list.length; i++) {
@@ -28,50 +27,55 @@ function showPage (list,page) {
    if(i >= startIndex && i <= endIndex) {
       let studentItem = list[i];
 
-//MAJOR REFACTORING TO BE DONE ONCE FULL FUNCTIONALITY IN PLACE
-//Just brute-forcing to get it up and running.
-
-//Will adjust to the following requirement: 
-/*'Once the template literal is created, we want to insert 
-it into the DOM on the studentList variable using the 
-insertAdjacentHTML method and beforeend position.'*/
-
-      let li = document.createElement('li');
-      li.className = 'student-item cf';
-
-      let divDetails = document.createElement('div'); 
-      divDetails.className = 'student-details';
-      li.appendChild(divDetails);
-
-      let img = document.createElement('img');
-      img.className = 'avatar';
-      img.src= `${studentItem.picture.large}`;
-      img.alt = 'Profile Picture';
-      divDetails.appendChild(img);
-
-      let name = document.createElement('h3');
-      name.textContent = `${studentItem.name.first} ${studentItem.name.last}`;
-      divDetails.appendChild(name);
-
-      studentList.appendChild(li);
-
-      let email = document.createElement('span');
-      email.className = 'email';
-      email.textContent = `${studentItem.email}`;
-      divDetails.appendChild(email);
-
-      let divJoined = document.createElement('div');
-      divJoined.className = 'joined-details';
-      li.appendChild(divJoined);
-
-      let date = document.createElement('span');
-      date.className = 'date';
-      date.textContent = `Joined ${studentItem.registered.date}`;
-      divJoined.appendChild(date);
+      //recreated the code as a simple template literal. Code far easier to read vs prior version.
+      student += `
+            <li class='student-item cf'>
+               <div class='student-details'>
+                  <img class='avatar' src='${studentItem.picture.large}' alt='Profile Picture'> 
+                  <h3>${studentItem.name.first} ${studentItem.name.last}</h3>
+                  <span class='email'>${studentItem.email}</span>
+               </div>
+               <div class='joined-details'>
+                  <span class='date'>Joined ${studentItem.registered.date}</span>
+               </div>   
+            </li>
+      `;
    }
   }
+  // insert the above elements
+  studentList.insertAdjacentHTML('beforeend',student); //insert element on to page
 }; //end of showPage function
 
+function addPagination(list) {
+   // create a variable to calculate the number of pages needed
+   let numOfPages = Math.ceil(list.length / itemsPerPage);
+ 
+   // select the element with a class of `link-list` and assign it to a variable
+   let linkList = document.querySelector('.link-list');
+
+   // set the innerHTML property of the variable you just created to an empty string
+   linkList.innerHTML = '';
+   let button=''; 
+   
+   // loop over the number of pages needed
+   for (let i = 1; i <= numOfPages; i++){
+      // create the elements needed to display the pagination button
+      button += `<li><button type='button'>${[i]}</button></li>`;
+   }
+// insert the above elements
+ linkList.insertAdjacentHTML('beforeend',button);
+
+   // give the first pagination button a class of "active"
+ 
+   // create an event listener on the `link-list` element
+     // if the click target is a button:
+       // remove the "active" class from the previous button
+       // add the active class to the clicked button
+       // call the showPage function passing the `list` parameter and page to display as arguments
+
+} // end of addPagination function
+
+addPagination(data);
 showPage(data,1); //Testing showPage functionality.
 
 /*
