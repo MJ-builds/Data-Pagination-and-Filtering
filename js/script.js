@@ -17,27 +17,29 @@ let searchHTML = `
 search.insertAdjacentHTML('afterend',searchHTML);
 
 // select the element with Id of `search`
-let searchInput = document.getElementById('search');
+let searchField = document.getElementById('search');
 
-   searchInput.addEventListener('keyup', (e) => {
-      let inputValue = e.target.value.toLowerCase(); //consider changing var here
-      let studentNames = document.querySelectorAll('li h3');
+   searchField.addEventListener('keyup', (e) => {
+      let input = e.target.value.toLowerCase();
+
+      //declare array to hold all students that match search
       let searchArray = [];
 
       //loop through entries/objects in the data array (see data.js)
       data.forEach(obj => {
       const searchName = `${obj.name.first} ${obj.name.last}`.toLowerCase();
 
-      /* if the search results find students, add to the searchArray (array),
+      /* if the search results find student, add to the searchArray (array),
       and call the showPage and addPagination functions, passing the searchArray array.
       */
-      if(searchName.includes(inputValue)) {
+      if(searchName.includes(input)) {
          searchArray.push(obj);
          showPage(searchArray, 1);
          addPagination(searchArray);
          document.querySelector('.link-list').style.display = 'block';
-      /* if the search results do not add any found students to the searchArray (array),
-      display an h3 message (below) and hide the ul: essentially 'soft disabling' pagination.
+      
+      /* if the search results do not add any students to the searchArray (array),
+      display an h3 message (below) and hide the ul: essentially 'soft disabling / hiding' pagination.
       */
       } else if (searchArray.length === 0) {
          document.querySelector(".student-list").innerHTML = "<h3>No results found</h3>"; 
@@ -111,6 +113,11 @@ function addPagination(list) {
 // insert the above elements
 linkList.insertAdjacentHTML('beforeend',button);
 
+/* Block of code below controls the button that is active (or selected).
+Dynamically changes the selected button to active (class), and removes active class 
+from the previously selected button
+*/
+
 // select the first button from the list
 let firstBtnActive = document.querySelector('li button');
  // give selected button a class name of "active"
@@ -122,8 +129,9 @@ linkList.addEventListener('click', (e) => {
    if (e.target.tagName === 'BUTTON') { 
 
       let active = document.querySelector('.active');
-
+      //previously active button become 'deactivated' / active class removed
       active.className='';
+      //new target button now becomes the active class
       e.target.className='active';
 
       // call the showPage function
