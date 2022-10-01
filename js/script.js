@@ -4,7 +4,49 @@ FSJS Project 2 - Data Pagination and Filtering
 */
 document.addEventListener('DOMContentLoaded', () => {
 
-const itemsPerPage = 9;
+//Instantiate search elements
+let search = document.querySelector('.header h2');
+
+let searchHTML = `
+      <label for="search" class="student-search">
+         <span>Search by name</span>
+         <input id="search" placeholder="Search by name...">
+         <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+      </label>
+`; 
+search.insertAdjacentHTML('afterend',searchHTML);
+
+// select the element with Id of `search`
+let searchInput = document.getElementById('search');
+
+   searchInput.addEventListener('keyup', (e) => {
+      let inputValue = e.target.value.toLowerCase(); //consider changing var here
+      let studentNames = document.querySelectorAll('li h3');
+      let searchArray = [];
+
+      //loop through entries/objects in the data array (see data.js)
+      data.forEach(obj => {
+      const searchName = `${obj.name.first} ${obj.name.last}`.toLowerCase();
+
+      /* if the search results find students, add to the searchArray (array),
+      and call the showPage and addPagination functions, passing the searchArray array.
+      */
+      if(searchName.includes(inputValue)) {
+         searchArray.push(obj);
+         showPage(searchArray, 1);
+         addPagination(searchArray);
+         document.querySelector('.link-list').style.display = 'block';
+      /* if the search results do not add any found students to the searchArray (array),
+      display an h3 message (below) and hide the ul: essentially 'soft disabling' pagination.
+      */
+      } else if (searchArray.length === 0) {
+         document.querySelector(".student-list").innerHTML = "<h3>No results found</h3>"; 
+         document.querySelector('.link-list').style.display = 'none';
+      }
+      }); //end of loop
+   }); //end of addEventListener
+
+const itemsPerPage = 9; //global scope
 
 // this function creates the elements needed to display a page of nine students
 function showPage (list , page) {
@@ -25,6 +67,7 @@ function showPage (list , page) {
    //selecting those specific students in the array that fall between startIndex and endIndex
    if(i >= startIndex && i <= endIndex) {
       let studentItem = list[i];
+
       // create the elements needed to display the student data
       student += `
             <li class='student-item cf'>
@@ -86,8 +129,8 @@ linkList.addEventListener('click', (e) => {
       // call the showPage function
       showPage(list,e.target.textContent);
    }
-});
 
+});
 } // end of addPagination function
 
 // Call functions
