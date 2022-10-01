@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let startIndex = page * itemsPerPage - itemsPerPage;
     let endIndex = page * itemsPerPage - 1;
 
-    // select the element with a class of `student-list`
     let studentList = document.querySelector(".student-list");
 
     studentList.innerHTML = "";
@@ -42,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     // insert the above elements
     studentList.insertAdjacentHTML("beforeend", student);
-  } // end of showPage function
+  }
 
   /* creates the pagination functionality, dynamically adding buttons in a list
 for navigation to display up to 9 students per page */
@@ -50,7 +49,6 @@ for navigation to display up to 9 students per page */
     // variable that calculates the number of pages needed
     let numOfPages = Math.ceil(list.length / itemsPerPage);
 
-    // select the element with a class of `link-list`
     let linkList = document.querySelector(".link-list");
 
     linkList.innerHTML = "";
@@ -70,8 +68,7 @@ for navigation to display up to 9 students per page */
 
     /* Block of code below controls the button that is active (or selected).
 Dynamically changes the selected button to active (class), and removes active class 
-from the previously selected button
-*/
+from the previously selected button */
 
     // select the first button from the list
     let firstBtnActive = document.querySelector("li button");
@@ -92,7 +89,7 @@ from the previously selected button
         showPage(list, e.target.textContent);
       }
     });
-  } // end of addPagination function
+  }
 
   /* Search functionality to both add search elements to page, 
 and to search through the student data array to match user input and display students if found
@@ -107,15 +104,16 @@ and to search through the student data array to match user input and display stu
             <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
          </label>
    `;
+    // insert the above elements
     search.insertAdjacentHTML("afterend", searchHTML);
 
     // select the element with Id of `search`
     let searchField = document.getElementById("search");
 
     searchField.addEventListener("keyup", (e) => {
-      let input = e.target.value.toLowerCase();
+      let userInput = e.target.value.toLowerCase();
 
-      //declare array to hold all students that match search
+      //declare array to hold all students that match user search
       let searchArray = [];
 
       //loop through entries/objects in the data array (see data.js)
@@ -125,7 +123,7 @@ and to search through the student data array to match user input and display stu
         /* if the search results find student, add to the searchArray (array),
          and call the showPage and addPagination functions, passing the searchArray array.
          */
-        if (searchName.includes(input)) {
+        if (searchName.includes(userInput)) {
           searchArray.push(obj);
           showPage(searchArray, 1);
           addPagination(searchArray);
@@ -139,10 +137,10 @@ and to search through the student data array to match user input and display stu
             "<h3>No results found</h3>";
           document.querySelector(".link-list").style.display = "none";
         }
-      }); //end of loop
-    }); //end of addEventListener
+      });
+    });
   }
   // Call functions
   showPage(data, 1);
   addPagination(data);
-}); // end of DOMContentLoaded
+});
