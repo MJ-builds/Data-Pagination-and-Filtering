@@ -3,9 +3,11 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 document.addEventListener("DOMContentLoaded", () => {
-  //call search function
+
+  //search functionality
   search();
-  const itemsPerPage = 9; //Global scope
+
+  const itemsPerPage = 9;
 
   // this function creates the elements needed to display a page of nine students
   function showPage(list, page) {
